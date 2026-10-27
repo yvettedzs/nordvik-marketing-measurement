@@ -1,0 +1,15 @@
+META HOLDOUT RESULT (Germany, outcome = orders)
+Test window: 2026-05-11 to 2026-10-19 (24 weeks; Meta paused in the first 12)
+Pre-period fit error (mean abs % error): 6.1%
+Control weights: {'AT': 0.664, 'FR': 0.941, 'NL': 0.526, 'UK': 0.44, 'SE': 0.649}
+
+Orders actual vs counterfactual: 6,655 vs 7,152
+Incremental orders from Meta: 497 lost when paused (-6.9%, 95% interval -11.0% to -2.9%)
+Naive pre/post (same-length window before): +17.5%   <- misleading (seasonality)
+Simple ratio difference-in-differences:      -6.9%
+
+Meta spend saved during the pause: EUR 738,617
+Incremental net revenue lost: EUR 1,811,088  (avg DE net order value EUR 3,647)
+Incremental ROAS: 2.45  (95% interval 1.01 to 3.89)
+Platform-reported ROAS in DE (pre-test): 2.42
+Break-even ROAS: 1.82

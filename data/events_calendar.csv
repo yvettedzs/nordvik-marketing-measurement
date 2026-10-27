@@ -1,0 +1,3 @@
+event,markets,channel,product,start_week,end_week,note
+promo,"DE,AT,FR,NL",,outdoor_furniture,2026-03-02,2026-03-23,headline 40% off selected lines
+meta_holdout,DE,Meta,all,2026-05-11,2026-07-27,Meta paused (spend = 0)

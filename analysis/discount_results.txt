@@ -1,0 +1,15 @@
+DISCOUNT RESULT (outdoor furniture, DE+AT+FR+NL vs UK+SE control, outcome = orders)
+Promo window: 2026-03-02 to 2026-03-23; follow-up window: 2026-03-30 to 2026-04-20
+
+Naive pre/post (promo weeks vs 4 weeks before): +49.1%   <- misleading (spring season ramp)
+Promo window orders: 2,346 actual vs 1,888 counterfactual -> lift +24.3% (95% interval +12.7% to +35.8%)
+Follow-up window:    1,881 actual vs 2,090 counterfactual -> -10.0% (95% interval -21.6% to +1.6%)
+8-week net orders:   +249 orders (+6.3%, 95% interval -2.3% to +14.8%)
+
+Realised discount implied by revenue: 24% (headline 40% on selected lines)
+Contribution margin per outdoor-furniture order: 55% of regular net price -> 31% when discounted
+Break-even lift (orders needed just to keep margin flat): +77%  vs observed +24%
+
+8-week effect vs no promo (promo markets, outdoor furniture):
+  Net revenue:          EUR -908,511
+  Contribution margin:  EUR -1,236,710  (-19.3% of baseline margin; range EUR -1,824,659 to -648,760 from the lift interval)
