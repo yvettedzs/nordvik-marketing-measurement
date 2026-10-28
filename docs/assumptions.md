@@ -2,7 +2,7 @@
 
 **Project:** "Where should the next euro go?" A measurement and budget-decision case study for a premium D2C outdoor-living brand.
 
-> **All data in this project is simulated.** The brand is fictional ("Nordvik Outdoor") and is not meant to be identifiable as any real company. Per-market revenue is not public, so every market weight and cost figure below is an illustrative assumption unless a source is given.
+> **All data in this project is simulated.** The brand is fictional ("Nordvik Outdoor") and is not meant to be identifiable as any real company.  
 
 ## 1. Business
 
@@ -17,7 +17,7 @@
 | Currency | EUR everywhere (no FX effects) |
 | Seasonality and growth | Peak March to July, trough December to January; ~8% annual growth |
 
-## 2. Markets (6 of the real 14, to keep the simulation manageable)
+## 2. Markets  
 
 | Market | Share of revenue | VAT | Consent behaviour (assumed) |
 |---|---|---|---|
@@ -28,20 +28,21 @@
 | UK | 10% | 20% | Moderate, ~15% untracked |
 | SE | 8% | 25% | Lenient, ~10% untracked |
 
-## 3. Channels and baseline budget (assumed, not sourced)
+## 3. Channels and baseline budget (assumed)
 
-Marketing spend is **20% of net revenue (~€23M per year)**, set by you after checking several sources. Baseline split: **Google 40%** (Search, Shopping, PMax), **Meta 30%**, **Affiliates 12%**, **TikTok 8%**, **SEO 8%** (content and agency), **Email 2%** (tooling). A seventh row, **Direct_Other**, holds revenue not driven by marketing (brand, direct, word of mouth), about 41% of the total.
+Marketing spend is **20% of net revenue (~€23M per year)**.  
+Baseline split: **Google 40%** (Search, Shopping, PMax), **Meta 30%**, **Affiliates 12%**, **TikTok 8%**, **SEO 8%** (content and agency), **Email 2%** (tooling). A seventh row, **Direct_Other**, holds revenue not driven by marketing (brand, direct, word of mouth), about 41% of the total.
 
 ## 4. Unit economics
 
 | Item | Assumption | Basis |
 |---|---|---|
-| Gross margin | **70%** of net revenue | Set by you after checking several sources. Treated as **product-level** (net revenue less cost of goods only), with delivery and returns costs shown separately below. The generic home-goods benchmarks I found were lower (about 30 to 56%, [Eightx](https://eightx.co/blog/home-goods-financial-benchmark)), so 70% implies a premium, own-design brand |
-| Variable costs | **15%** (delivery, payment fees, returns handling) | Judgement: bulky delivered goods |
+| Gross margin | **70%** of net revenue | Treated as **product-level** (net revenue less cost of goods only), with delivery and returns costs shown separately below. 70% implies a premium, own-design brand |
+| Variable costs | **15%** (delivery, payment fees, returns handling) | Bulky delivered goods |
 | **Contribution margin before marketing** | **55%** (~€1,980 per order) | 70% - 15% |
-| Cancellations / refunds | **5% combined**, both products | Set by you: pre-delivery cancellations 2 to 5% (buyer's remorse, planning hurdles) and post-delivery refunds 1 to 2%. Generic online furniture returns run much higher (~22.7%, [Eightx](https://eightx.co/blog/average-furniture-and-home-return-rate-benchmarks)), but made-to-order, installed items return far less. **Revenue in the dataset is already net of cancellations** |
-| Repeat purchase | **0%**: each order is a new customer | Set by you. Orders are high-ticket, one-off purchases, and the net order value (~€3,600) already blends outdoor furniture and summer houses. So orders = new customers, CAC = spend / orders, and lifetime value equals first-order value |
-| Conversion | ~1% of sessions order; ~3% request a quote or use the configurator | Judgement |
+| Cancellations / refunds | **5% combined**, both products | Pre-delivery cancellations 2 to 5% (buyer's remorse, planning hurdles) and post-delivery refunds 1 to 2%. Made-to-order, installed items return far less than common outdoor furniture. **Revenue in the dataset is already net of cancellations** |
+| Repeat purchase | **0%**: each order is a new customer | Orders are high-ticket, one-off purchases, and the net order value (~€3,600) already blends outdoor furniture and summer houses. So orders = new customers, CAC = marketing spend / orders, and lifetime value equals first-order value |
+| Conversion | ~1% of sessions order; ~3% request a quote or use the configurator | |
 
 ## 5. Customer journey
 
