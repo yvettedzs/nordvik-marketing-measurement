@@ -12,6 +12,9 @@ A portfolio project on a **fictional premium D2C outdoor-living brand ("Nordvik 
 | Did the spring discount pay off? | Promo vs no-promo markets, outcome = orders, then contribution margin | Real lift about +24% (naive pre/post showed +49%), then a -10% pull-forward dip. It needed about +77% to break even, and cost roughly **EUR 1.2M of margin** over 8 weeks |
 | Where should the next euro go? | Budget memo | Trim Meta and TikTok, reinvest part in Google non-brand and Affiliates in small steps, stop broad discounting, and run follow-up tests |
 
+![Meta holdout](analysis/meta_holdout.png)  
+![Discount analysis](analysis/discount.png)  
+
 ## Repository contents
 
 | Path | What it is |
