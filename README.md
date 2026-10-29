@@ -2,7 +2,7 @@
 
 A portfolio project on a **fictional premium D2C outdoor-living brand ("Nordvik Outdoor")**. It asks where marketing spend should go across channels and markets, using incrementality tests, a metric dictionary and a budget memo.
 
-> **All data is simulated.** The brand, markets, prices and results are fictional and not drawn from any real company. Effect sizes are planted in the data on purpose, so the methods can be checked against a known answer.
+> **All data is simulated.** The brand, markets, prices and results are fictional. Effect sizes are planted in the data on purpose, so the methods can be checked against a known answer.
 
 ## Headline findings (simulated data)
 
