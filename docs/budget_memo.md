@@ -11,7 +11,7 @@ Move about **€1.9M (8% of the €22.5M budget)** out of Meta and TikTok, put r
 ## What the evidence says
 Break-even ROAS is **1.8** (55% contribution margin before marketing). Platform numbers overstate; attribution is not incrementality.
 
-| Channel | Spend / yr | Platform ROAS | Attributed ROAS | Tested? |
+| Channel | Spend / yr | Platform ROAS | Simulated true iROAS* | Tested? |
 |---|---|---|---|---|
 | Google | €9.1M (41%) | 5.0 | 3.7 | No |
 | Meta | €6.5M (29%) | 2.4 | 1.5 | **Yes: holdout 2.45, range 1.0 to 3.9** |
@@ -20,7 +20,9 @@ Break-even ROAS is **1.8** (55% contribution margin before marketing). Platform 
 | SEO | €1.8M (8%) | n/a | 4.8 | No |
 | Email | €0.5M (2%) | 17.0 | 11.9 | No |
 
-- **Meta** is real (it drives about 7% of German orders) but unproven as profitable. Its platform figure, attributed figure and holdout range all sit at or around break-even, and the next euro earns less than the average one.
+*Known only because the data is simulated (planted effect). In real data this column would be analytics-attributed ROAS, which is not incremental.
+
+- **Meta** is real (it drives about 7% of German orders) but unproven as profitable. Its platform figure, simulated true iROAS and holdout range all sit at or around break-even, and the next euro earns less than the average one.
 - **TikTok** does not clear break-even on any lens except its own dashboard.
 - **Discount:** the spring promo lifted outdoor-furniture orders about 24%, but needed +77% to break even, and cost roughly **€1.2M of margin** over 8 weeks.
 
