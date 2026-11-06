@@ -4,6 +4,8 @@
 --        net_revenue_eur by order week, so totals over the full period are compared).
 -- RULE:  ratio > 1.50 = FAIL, ratio > 1.25 = WARN, otherwise OK. SEO and Direct_Other have no platform figure.
 -- ACTION: FAIL means do not use that platform's ROAS for budget decisions without an incrementality test.
+-- NOTE:  net_revenue_eur by channel is the simulation's causal truth, not analytics-attributed revenue.
+--        A journey-level attributed version is planned.
 WITH by_channel AS (
     SELECT channel,
            SUM(spend_eur)                     AS spend_eur,
