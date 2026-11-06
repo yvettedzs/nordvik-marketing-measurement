@@ -79,7 +79,7 @@ Two events are built into the data: a **spring discount on outdoor furniture** (
 | `spend_eur` | Media or channel spend, ex-VAT |
 | `sessions` | Visits attributed to the channel, by visit week |
 | `orders`, `orders_outdoor_furniture`, `orders_summer_house` | Orders by **order week** |
-| `net_revenue_eur` | Net of VAT and cancellations, by order week |
+| `net_revenue_eur` | Net of VAT and cancellations, by order week. By channel, this is the revenue the channel **caused** (the simulation's truth); a real analytics tool could not split revenue this way |
 | `platform_reported_revenue_eur` | What the ad platform claims, by **click week** (blank for SEO and Direct_Other) |
 | `data_origin` | Always `simulated` here |
 

@@ -20,7 +20,7 @@ Break-even ROAS is **1.8** (55% contribution margin before marketing). Platform 
 | SEO | €1.8M (8%) | n/a | 4.8 | No |
 | Email | €0.5M (2%) | 17.0 | 11.9 | No |
 
-*Known only because the data is simulated (planted effect). In real data this column would be analytics-attributed ROAS, which is not incremental.
+*Realised incremental ROAS in the simulated data (planted values: Google 3.6, Meta 1.5, Affiliates 3.0, TikTok 0.7, SEO 4.8, Email 12.0). It is known only because the data is simulated and is shown for validation. In real data the analyst would see analytics-attributed ROAS here, which is not incremental, so the Google, TikTok, Affiliates, SEO and Email readings would still need the tests listed below.
 
 - **Meta** is real (it drives about 7% of German orders) but unproven as profitable. Its platform figure, simulated true iROAS and holdout range all sit at or around break-even, and the next euro earns less than the average one.
 - **TikTok** does not clear break-even on any lens except its own dashboard.
