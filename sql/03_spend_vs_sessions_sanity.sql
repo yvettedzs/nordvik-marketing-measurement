@@ -3,6 +3,10 @@
 --   A) spend but no sessions (broken tags or landing pages)
 --   B) sessions but no spend (untagged traffic or mislabelled UTMs)
 --   C) cost per session far from the channel's normal level (more than 4 standard deviations)
+-- RULE:  FLAG a row if A) spend > 0 and sessions = 0, B) spend = 0 and sessions > 0, or C) cost per session is
+--        more than 4 standard deviations from that market x channel's mean over the full period.
+-- ACTION: for A and B, check tags, landing pages and UTMs; for C, check for billing errors or unusual traffic
+--        before using that week's cost figures.
 -- NOTE: A planned pause (see data/events_calendar.csv) shows as spend = 0 and sessions = 0 and is not an error.
 WITH paid AS (
     SELECT * FROM read_csv_auto('data/simulated_weekly_data.csv')
