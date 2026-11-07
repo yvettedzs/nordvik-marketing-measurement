@@ -1,0 +1,4 @@
+-r ../requirements.txt
+# FastMCP API (mcp 2.x renamed it to MCPServer)
+mcp>=1.10,<2
+pytest
