@@ -13,12 +13,12 @@ Break-even ROAS is **1.8** (55% contribution margin before marketing). Platform 
 
 | Channel | Spend / yr | Platform ROAS | Simulated true iROAS* | Tested? |
 |---|---|---|---|---|
-| Google | €9.1M (41%) | 5.0 | 3.7 | No |
+| Google | €9.1M (41%) | 5.0 | 3.6 | No |
 | Meta | €6.5M (29%) | 2.4 | 1.5 | **Yes: holdout 2.45, range 1.0 to 3.9** |
 | Affiliates | €2.7M (12%) | 4.2 | 3.0 | No |
 | TikTok | €1.8M (8%) | 2.0 | 0.7 | No |
 | SEO | €1.8M (8%) | n/a | 4.8 | No |
-| Email | €0.5M (2%) | 17.0 | 11.9 | No |
+| Email | €0.5M (2%) | 17.1 | 11.9 | No |
 
 *Realised incremental ROAS in the simulated data (planted values: Google 3.6, Meta 1.5, Affiliates 3.0, TikTok 0.7, SEO 4.8, Email 12.0). It is known only because the data is simulated and is shown for validation. In real data the analyst would see analytics-attributed ROAS here, which is not incremental, so the Google, TikTok, Affiliates, SEO and Email readings would still need the tests listed below.
 
