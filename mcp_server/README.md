@@ -32,7 +32,7 @@ The server works from any working directory, because it resolves all paths from 
 }
 ```
 
-If `python` isn't on the PATH that Claude Desktop sees, use the full path to `python.exe`.
+If you installed the requirements in a virtual environment, use that environment's Python as `command`, as a full absolute path: `...\.venv\Scripts\python.exe` on Windows or `.../.venv/bin/python` on macOS/Linux. Plain `python` may start a different Python that doesn't have the `mcp` package. The same applies to the Claude Code command below.
 
 **Claude Code:** run this from the repository root:
 
