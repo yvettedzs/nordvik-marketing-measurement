@@ -341,12 +341,23 @@ def test_output_file_sizes(repo_root):
 
 
 # ============================================================ D. slow: regenerate -> identical outputs
-def _gz_sha(path):
+def _sha_no_cr(fh):
+    """SHA-256 of the content with line endings normalised: every \\r is dropped, so a file written on Windows
+    (\\r\\n) and one written on Linux/Mac (\\n) hash the same. The data contains no other \\r."""
     h = hashlib.sha256()
-    with gzip.open(path, "rb") as fh:
-        for chunk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(chunk)
+    for chunk in iter(lambda: fh.read(1 << 20), b""):
+        h.update(chunk.replace(b"\r", b""))
     return h.hexdigest()
+
+
+def _gz_sha(path):
+    with gzip.open(path, "rb") as fh:
+        return _sha_no_cr(fh)
+
+
+def _sha(path):
+    with open(path, "rb") as fh:
+        return _sha_no_cr(fh)
 
 
 def _key_without_runtime(text):
@@ -366,7 +377,7 @@ def test_regenerate_reproduces_outputs(repo_root, tmp_path, record_property):
     print(f"\ngenerate_journeys.py runtime: {runtime:.1f} s")
     assert runtime < 300
     assert _gz_sha(tmp_path / gj.EVENTS_REL) == _gz_sha(repo_root / gj.EVENTS_REL)
-    assert (tmp_path / gj.TRUTH_REL).read_bytes() == (repo_root / gj.TRUTH_REL).read_bytes()
+    assert _sha(tmp_path / gj.TRUTH_REL) == _sha(repo_root / gj.TRUTH_REL)
     assert _key_without_runtime((tmp_path / gj.KEY_REL).read_text(encoding="utf-8")) == \
         _key_without_runtime((repo_root / gj.KEY_REL).read_text(encoding="utf-8"))
 
