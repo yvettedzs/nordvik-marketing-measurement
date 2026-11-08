@@ -9,7 +9,7 @@ Four checks on the simulated weekly dataset (`data/simulated_weekly_data.csv`), 
 | `03_spend_vs_sessions_sanity.sql` | Do spend and sessions move together for paid channels? | One cost-per-session outlier (AT, Google). No spend-without-sessions or sessions-without-spend rows |
 | `04_revenue_reconciliation.sql` | Do orders and revenue reconcile? | Components add up. March 2026 revenue per order is low in the four promo markets, as expected from discounted outdoor furniture |
 
-**Note:** in check 01, `net_revenue_eur` by channel is the simulation's causal truth, not analytics-attributed revenue. A journey-level attributed version is planned.
+**Note:** in check 01, `net_revenue_eur` by channel is the simulation's causal truth, not analytics-attributed revenue. The journey-level version (model-credited revenue by attribution model and lookback window) is in `analysis/attribution_comparison.csv`; see `docs/attribution_findings.md`.
 
 ## Run
 From the repository root:
