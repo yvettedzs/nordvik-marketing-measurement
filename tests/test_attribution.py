@@ -11,6 +11,7 @@ Run from the repository root:  python -m pytest tests/test_attribution.py -v    
 import gzip
 import hashlib
 import importlib.util
+import re
 import shutil
 import subprocess
 import sys
@@ -360,8 +361,13 @@ def _sha(path):
         return _sha_no_cr(fh)
 
 
+_SIZE_LINE = re.compile(r"^- `[^`]+`: [\d.]+ (MB|KB)$")      # e.g. "- `data/simulated_journeys.csv.gz`: 20.76 MB"
+
+
 def _key_without_runtime(text):
-    return "\n".join(l for l in text.splitlines() if not l.startswith("- Runtime:"))
+    """Answer key without the lines that vary by machine: runtime, and file sizes (gzip output differs by
+    platform / zlib version, and CSV size by line endings, even when the content is identical)."""
+    return "\n".join(l for l in text.splitlines() if not l.startswith("- Runtime:") and not _SIZE_LINE.match(l))
 
 
 @pytest.mark.slow
