@@ -103,9 +103,10 @@ def _memo_table(repo_root):
     text = (repo_root / "docs" / "budget_memo.md").read_text(encoding="utf-8")
     rows = {}
     for line in text.splitlines():
-        m = re.match(r"\| (\w+) \| €([\d.]+)M \(\d+%\) \| ([\d.]+|n/a) \| ([\d.]+) \|", line)
+        m = re.match(r"\| (\w+) \| €([\d.]+)M \(\d+%\) \| ([\d.]+|n/a) \| ([\d.]+) \| ([\d.]+) \|", line)
         if m:
-            rows[m[1]] = dict(spend_m=float(m[2]), platform=None if m[3] == "n/a" else float(m[3]), true=float(m[4]))
+            rows[m[1]] = dict(spend_m=float(m[2]), platform=None if m[3] == "n/a" else float(m[3]),
+                              last_non_direct=float(m[4]), true=float(m[5]))
     return rows
 
 
@@ -117,6 +118,7 @@ def test_memo_table_matches_tools(repo_root):
         spend_yr = s.get_kpis(channel=ch)["result"]["spend_eur"] / YEARS / 1e6
         assert round(spend_yr, 1) == m["spend_m"], ch
         assert round(rows[ch]["simulated_true_iroas"], 1) == m["true"], ch
+        assert round(rows[ch]["attributed_roas"]["models_90d"]["last_non_direct"], 1) == m["last_non_direct"], ch
         if m["platform"] is None:
             assert rows[ch]["platform_roas"] is None
         else:
@@ -138,6 +140,50 @@ def test_compare_roas_matches_sql_check_01_and_break_even():
     assert meta["platform_above_break_even"] is True and meta["true_above_break_even"] is False
     tiktok = next(r for r in res["channels"] if r["channel"] == "TikTok")
     assert tiktok["true_above_break_even"] is False
+
+
+ATTR_MODELS = ["last_click", "last_non_direct", "first_click", "linear", "time_decay_7d", "time_decay_30d",
+               "u_shaped", "w_shaped"]
+
+
+def test_compare_roas_attributed_roas_matches_csv(repo_root):
+    """attributed_roas = analysis/attribution_comparison.csv, observed paths: 8 variants at 90 days + last
+    non-direct at 7/30/90/365 days (independent pandas read of the CSV)."""
+    import pandas as pd
+    csv = pd.read_csv(repo_root / "analysis" / "attribution_comparison.csv")
+    obs = csv[csv.view == "observed"]
+    rows = {r["channel"]: r for r in s.compare_roas()["result"]["channels"]}
+    for ch in PAID:
+        a = rows[ch]["attributed_roas"]
+        assert a["status"] == "available" and a["source"] == "analysis/attribution_comparison.csv"
+        assert list(a["models_90d"]) == ATTR_MODELS
+        assert list(a["last_non_direct_by_lookback_days"]) == ["7", "30", "90", "365"]
+        c = obs[obs.channel == ch]
+        for m in ATTR_MODELS:
+            exp = c[(c.model == m) & (c.lookback_days == 90)].model_roas.item()
+            assert abs(a["models_90d"][m] - exp) < RATIO_TOL, (ch, m)
+        for lb in [7, 30, 90, 365]:
+            exp = c[(c.model == "last_non_direct") & (c.lookback_days == lb)].model_roas.item()
+            assert abs(a["last_non_direct_by_lookback_days"][str(lb)] - exp) < RATIO_TOL, (ch, lb)
+        assert a["models_90d"]["last_non_direct"] == a["last_non_direct_by_lookback_days"]["90"]
+        assert abs(a["journey_true_iroas"] - c.true_iroas.iloc[0]) < RATIO_TOL
+        assert abs(a["journey_spend_eur"] - c.spend_eur.iloc[0]) < EUR_TOL
+        assert a["journey_true_iroas_label"] == "validation only: not observable in real data"
+        assert "90 days" in a["lookback_note"]
+    r = s.compare_roas("Email")
+    assert "analysis/attribution_comparison.csv" in r["sources"]
+    assert any("journey_true_iroas" in c for c in r["caveats"])
+    assert any("navigational" in c for c in r["caveats"])
+    assert "Model-credited ROAS" in r["definitions_used"]
+
+
+def test_compare_roas_attributed_roas_missing_csv(monkeypatch):
+    monkeypatch.setattr(s, "ATTRIBUTION_REL", "analysis/does_not_exist.csv")
+    r = s.compare_roas("Meta")
+    a = r["result"]["channels"][0]["attributed_roas"]
+    assert a["status"].startswith("not available: run analysis/03_attribution_models.py")
+    assert a["models_90d"] == {}
+    assert "analysis/does_not_exist.csv" not in r["sources"]
 
 
 def test_meta_holdout_result():
@@ -333,6 +379,9 @@ def test_mcp_protocol():
             ok = await client.call_tool("get_test_result", {"test": "meta_holdout"})
             assert not ok.isError
             assert ok.structuredContent["result"]["iroas"] == 2.45
+            roas = await client.call_tool("compare_roas", {"channel": "Google"})
+            a = roas.structuredContent["result"]["channels"][0]["attributed_roas"]
+            assert a["status"] == "available" and len(a["models_90d"]) == 8
             bad = await client.call_tool("get_kpis", {"market": "ES"})
             assert bad.isError and "DE, AT, FR, NL, UK, SE" in bad.content[0].text
     anyio.run(main)
