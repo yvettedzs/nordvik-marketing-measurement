@@ -21,5 +21,5 @@ The paths are relative, so run from the root folder.
 
 ## Notes
 - Check 02 catches sudden breaks, not gradual effects. I tested it by cutting one week of German orders by 60% in a copy of the data, and it flagged that week.
-- Event-level checks (duplicate `transaction_id`, missing or inconsistent UTMs) need event-level data, which this dataset does not have. They are planned for the tracking demo repo and do not exist yet.
+- Event-level checks (duplicate `transaction_id`, missing or inconsistent UTMs) need event-level data, which this dataset does not have. They are outside the scope of this repo.
 
