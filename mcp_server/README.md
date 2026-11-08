@@ -49,7 +49,7 @@ All tools are read-only (`readOnlyHint`). They return JSON with the same envelop
 | `list_metrics()` | The 6 metrics (CAC, ROAS, MER, contribution margin, payback, iROAS) with one-line definitions, parsed from `docs/metric_dictionary.md` |
 | `define_metric(name)` | Full definition: formula, includes/excludes, example, notes and the raw section. Accepts the key, the abbreviation or the full name, in any case |
 | `get_kpis(market="all", channel="all", start=None, end=None)` | Spend, orders, net revenue, MER, CAC, and contribution margin before and after marketing. Dates are ISO and inclusive on `week_start`. With a channel filter, `mer` is null and `simulated_incremental_roas` is returned instead, and CAC becomes *simulated incremental CAC* |
-| `compare_roas(channel="all")` | Platform ROAS vs simulated true iROAS (*validation only: not observable in real data*), break-even 1.82, and the Meta holdout result. `attributed_roas` is a placeholder until the attribution extension exists |
+| `compare_roas(channel="all")` | Platform ROAS vs simulated true iROAS (*validation only: not observable in real data*), break-even 1.82, and the Meta holdout result. `attributed_roas` holds model-credited ROAS from the journey simulation (`analysis/attribution_comparison.csv`, observed paths): all 8 attribution model variants at a 90-day lookback, last non-direct click at 7 / 30 / 90 / 365 days, and the journey's true iROAS (*validation only*) |
 | `run_quality_check(name)` | Runs one SQL check (`01`–`04` or its name, e.g. `platform_vs_analytics_gap`) and returns its rule, its rows and an overall status |
 | `get_test_result(test)` | `meta_holdout` or `discount`, parsed from `analysis/*_results.txt`, with the 95% intervals and a verdict |
 
@@ -63,7 +63,7 @@ Conventions and caveats:
 
 `tests/test_mcp_tools.py` compares the tools against:
 - an independent pandas recalculation of the CSV;
-- the published outputs: `analysis/*_results.txt` (e.g. Meta holdout iROAS **2.45**, 1.01 to 3.89), the SQL check rows (run directly through DuckDB), the findings in `sql/README.md`, the `docs/budget_memo.md` table, and the README headlines;
+- the published outputs: `analysis/*_results.txt` (e.g. Meta holdout iROAS **2.45**, 1.01 to 3.89), the SQL check rows (run directly through DuckDB), the findings in `sql/README.md`, the `docs/budget_memo.md` table, the README headlines, and `analysis/attribution_comparison.csv` (for `attributed_roas`);
 - contract rules: the envelope, validation errors, "incremental not attributed" wording, a before/after file hash showing nothing is written, and an in-memory MCP client session.
 
 A `slow` test re-runs both analysis scripts in a temp folder and checks that the committed results files still reproduce from the current data.

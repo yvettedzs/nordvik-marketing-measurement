@@ -24,6 +24,13 @@ from mcp.types import ToolAnnotations
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DATA_REL = "data/simulated_weekly_data.csv"
 CALENDAR_REL = "data/events_calendar.csv"
+ATTRIBUTION_REL = "analysis/attribution_comparison.csv"
+ATTRIBUTION_SCRIPT_REL = "analysis/03_attribution_models.py"
+ATTRIBUTION_MODELS = ["last_click", "last_non_direct", "first_click", "linear", "time_decay_7d", "time_decay_30d",
+                      "u_shaped", "w_shaped"]
+ATTRIBUTION_LOOKBACKS = [7, 30, 90, 365]
+MODEL_CREDITED_LABEL = ("model-credited revenue / spend: analytics attribution on the simulated user journeys "
+                        "(observed paths, after consent loss); not incremental")
 DICTIONARY_REL = "docs/metric_dictionary.md"
 ASSUMPTIONS_REL = "docs/assumptions.md"
 
@@ -337,6 +344,35 @@ def _jsonable(v: Any) -> Any:
     return v
 
 
+# ---------------------------------------------------------------- attribution extension (journey simulation)
+def _attribution_blocks() -> dict[str, dict[str, Any]] | None:
+    """Per channel: ROAS by attribution model (90-day lookback) and last non-direct by lookback, from the
+    attribution comparison CSV (observed paths). None if the CSV does not exist yet."""
+    path = _path(ATTRIBUTION_REL)
+    if not path.exists():
+        return None
+    df = pd.read_csv(path)
+    df = df[(df.view == "observed") & (df.channel != "Direct_Other")]
+    out = {}
+    for ch, g in df.groupby("channel"):
+        m90 = g[g.lookback_days == 90].set_index("model").model_roas
+        lnd = g[g.model == "last_non_direct"].set_index("lookback_days").model_roas
+        out[ch] = {
+            "status": "available",
+            "label": MODEL_CREDITED_LABEL,
+            "source": ATTRIBUTION_REL,
+            "scope": "journey simulation: one-year cohort (first touches 2024-10-28 to 2025-10-26, orders followed "
+                     "to 2026-10-25), all markets, observed paths",
+            "journey_spend_eur": round(float(g.spend_eur.iloc[0]), 2),
+            "models_90d": {m: round(float(m90[m]), 4) for m in ATTRIBUTION_MODELS},
+            "last_non_direct_by_lookback_days": {str(lb): round(float(lnd[lb]), 4) for lb in ATTRIBUTION_LOOKBACKS},
+            "journey_true_iroas": round(float(g.true_iroas.iloc[0]), 4),
+            "journey_true_iroas_label": VALIDATION_ONLY,
+            "lookback_note": "GA4's maximum lookback window is 90 days; 365 days is shown for comparison only.",
+        }
+    return out
+
+
 # ---------------------------------------------------------------- tools
 @mcp.tool(annotations=READ_ONLY)
 def list_metrics() -> dict[str, Any]:
@@ -451,6 +487,8 @@ def get_kpis(market: str = "all", channel: str = "all", start: str | None = None
 def compare_roas(channel: str = "all") -> dict[str, Any]:
     """Platform-reported ROAS vs simulated true incremental ROAS per paid channel (full period, all markets),
     with the break-even ROAS line (1 / 0.55 = 1.82). Meta also gets the geo-holdout iROAS and interval.
+    attributed_roas: model-credited ROAS from the journey simulation (observed paths): all 8 attribution model
+    variants at a 90-day lookback, plus last non-direct click at 7 / 30 / 90 / 365 days.
     channel: all, Google, Meta, Affiliates, TikTok, SEO, Email. Simulated data."""
     valid = [c for c in CHANNELS if c != "Direct_Other"]
     ch = _resolve(channel, valid, "channel")
@@ -461,6 +499,8 @@ def compare_roas(channel: str = "all") -> dict[str, Any]:
         WHERE channel <> 'Direct_Other' AND (? = 'all' OR channel = ?)
         GROUP BY channel ORDER BY spend DESC""", [ch, ch]).df()
     holdout = _parse_meta(_read(TESTS["meta_holdout"][0]))
+    attribution = _attribution_blocks()
+    missing = {"status": f"not available: run {ATTRIBUTION_SCRIPT_REL} to create {ATTRIBUTION_REL}", "models_90d": {}}
     rows = []
     for r in df.itertuples():
         plat = None if pd.isna(r.platform_rev) else float(r.platform_rev)
@@ -477,7 +517,7 @@ def compare_roas(channel: str = "all") -> dict[str, Any]:
             "overstatement_ratio": round(plat / r.channel_rev, 4) if plat is not None else None,
             "platform_above_break_even": (p_roas >= BREAK_EVEN_ROAS) if p_roas is not None else None,
             "true_above_break_even": t_roas >= BREAK_EVEN_ROAS,
-            "attributed_roas": {"status": "not available: the planned attribution extension does not exist yet", "models": {}},
+            "attributed_roas": (attribution or {}).get(r.channel, missing),
             "holdout": ({"iroas": holdout["iroas"], "ci_95": holdout["iroas_ci_95"], "market": "DE",
                          "verdict": holdout["verdict"], "source": TESTS["meta_holdout"][0]}
                         if r.channel == "Meta" else None),
@@ -493,9 +533,20 @@ def compare_roas(channel: str = "all") -> dict[str, Any]:
     ]
     if any(r["channel"] == "SEO" for r in rows):
         caveats.append("SEO has no ad platform, so platform ROAS is null.")
-    return _envelope({"ROAS (platform)": _definition("roas"), "iROAS": _definition("iroas"),
-                      "Break-even ROAS": f"1 / {CM_RATE:.2f} = {BREAK_EVEN_ROAS:.2f}"},
-                     [DATA_REL, DICTIONARY_REL, ASSUMPTIONS_REL, TESTS["meta_holdout"][0]], result, caveats)
+    sources = [DATA_REL, DICTIONARY_REL, ASSUMPTIONS_REL, TESTS["meta_holdout"][0]]
+    defs = {"ROAS (platform)": _definition("roas"), "iROAS": _definition("iroas"),
+            "Break-even ROAS": f"1 / {CM_RATE:.2f} = {BREAK_EVEN_ROAS:.2f}"}
+    if attribution is not None:
+        sources.append(ATTRIBUTION_REL)
+        defs["Model-credited ROAS"] = MODEL_CREDITED_LABEL
+        caveats += [
+            "attributed_roas comes from the user-journey simulation (one-year cohort), not from the 104-week weekly "
+            "dataset: compare it with journey_true_iroas in the same block, not with simulated_true_iroas.",
+            "Attribution models split credit for orders; they do not measure what a channel caused. "
+            "70% of simulated orders have a zero-lift navigational session just before purchase (a design choice), "
+            "which drives the last-click results.",
+        ]
+    return _envelope(defs, sources, result, caveats)
 
 
 @mcp.tool(annotations=READ_ONLY)
