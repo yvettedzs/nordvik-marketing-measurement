@@ -16,7 +16,7 @@ Build exactly these six tools; propose any additions instead of adding them.
 | `list_metrics()` | Metric names and one-line definitions, parsed from `docs/metric_dictionary.md` |
 | `define_metric(name)` | Full definition: formula, inclusions/exclusions, caveats |
 | `get_kpis(market, channel, start, end)` | Spend, orders, net revenue, MER, CAC, CM, computed with the dictionary’s formulas |
-| `compare_roas(channel)` | Platform ROAS vs simulated true iROAS (and, once the planned attribution extension exists, attributed ROAS by model), with the break-even line |
+| `compare_roas(channel)` | Platform ROAS vs simulated true iROAS, plus model-credited ROAS by attribution model from the journey simulation (`analysis/attribution_comparison.csv`: 8 model variants at 90 days, last non-direct at 7 / 30 / 90 / 365 days), with the break-even line |
 | `run_quality_check(name)` | Runs one of the four SQL checks and returns the status table |
 | `get_test_result(test)` | Meta holdout or discount result from `analysis/*_results.txt`, including the interval |
 

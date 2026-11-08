@@ -46,8 +46,14 @@ Baseline split: **Google 40%** (Search, Shopping, PMax), **Meta 30%**, **Affilia
 
 ## 5. Customer journey
 
-- High-ticket buying window: **30 to 90 days** from first click to order. Orders follow a right-skewed (log-normal) curve, not an even spread: **median 31 days**, about 95% of orders within 90 days, and a long tail of late buyers.
+- High-ticket buying window: **30 to 90 days** from click to order. Orders follow a right-skewed (log-normal) curve, not an even spread: **median 31 days** from the click that triggers the order, about 95% of orders within 90 days, and a long tail of late buyers. The weekly dataset truncates this lag at 91 days.
 - Compare attribution windows of 7, 30 and 90 days. A 7-day window misses most orders.
+
+**Attribution extension (user-journey simulation, `generate_journeys.py`).** Simulated people with several touches each, used to compare attribution models with a counterfactual truth (`docs/attribution_findings.md`). Its journey assumptions:
+- **Causing touch vs first click.** The 31-day median runs from the *causing* touch (the touch that triggers the order). Measured from the *first* click, the median is longer: about **43 days for self-serve orders and 50 days overall**, because the causing touch is often not the first one. About 90% of self-serve orders and 81% of all orders arrive within 90 days of the first click.
+- **Two path types.** *Self-serve*: click → order, lag as above (truncated at 91 days). *Lead path*: click → `quote_request` → order (all summer houses and about 11% of outdoor furniture). The quote-to-order delay has a long tail of **up to 365 days** (median about 60 days). **Only the lead path in the journey simulation uses the 365-day tail; the 91-day truncation still applies everywhere else, and the weekly dataset is unchanged.**
+- **Consent loss is per person** at the rates in section 2 (DE/AT 30%, FR/NL 20%, UK 15%, SE 10%): all touches of an untracked person are missing from the observed paths. Orders and quote requests are always recorded (server-side / CRM).
+- **Cohort.** First touches in the first 52 weeks (28 Oct 2024 to 26 Oct 2025), orders followed to 25 Oct 2026. Spend is the weekly dataset's year-1 spend; true iROAS follows the planted values in direction.
 
 ## 6. Conventions
 

@@ -21,7 +21,7 @@
 - **Includes:** media, agency and content fees, marketing tools. **Excludes:** sales staff salaries and discounts (reported separately).
 - **Two versions:** *blended CAC* (all spend, all new customers) and *paid CAC* (paid media spend, new customers from paid channels).
 - **Example:** €23M / 32,000 new customers = **~€720**.
-- **High-ticket note:** a customer who clicks today orders within a **30 to 90 day** window (median 31 days, long right tail). Match spend to the orders it produces later, or CAC looks too high in growth weeks and too low in quiet ones.
+- **High-ticket note:** a customer who clicks today orders within a **30 to 90 day** window (median 31 days from the click that triggers the order, long right tail). Measured from the *first* click, the median is longer: about 43 days for self-serve orders and 50 days overall in the journey simulation, and quote-based orders can take up to 365 days (see `assumptions.md`, section 5). Match spend to the orders it produces later, or CAC looks too high in growth weeks and too low in quiet ones.
 - **Common misuse:** comparing CAC to revenue instead of contribution margin.
 
 ## 2. ROAS (Return on Ad Spend)
@@ -31,6 +31,7 @@
 - **Example:** €418k attributed revenue on €174k spend = **2.4**.
 - **Break-even ROAS** = 1 / contribution margin % before marketing = 1 / 0.55 = **~1.8**. Below this, the channel loses money on each order.
 - **Limits:** each platform credits itself, windows and view-through rules differ, and platform numbers overlap. ROAS shows what a platform *claims*, not what it *caused*.
+- **Model-credited ROAS:** the analytics version: revenue credited to the channel by an attribution model (e.g. GA4 last non-direct click, 90-day lookback) / spend. It does not double-count across channels, but like platform ROAS it splits credit for orders instead of measuring what the channel caused. In the journey simulation it errs in both directions (see `attribution_findings.md`).
 
 ## 3. MER (Marketing Efficiency Ratio)
 
@@ -50,7 +51,7 @@
 ## 5. Payback
 
 - **Ratio:** contribution margin on the first order / CAC = €1,980 / €720 = **~2.8x**.
-- **Time:** days from the first paid touch until cumulative contribution margin covers CAC. For this product the first order covers CAC, so payback time is mostly the **click-to-order lag (median 31 days)**, plus any delay before cash is collected.
+- **Time:** days from the first paid touch until cumulative contribution margin covers CAC. For this product the first order covers CAC, so payback time is mostly the **click-to-order lag (median 31 days from the triggering click; about 43 days self-serve and 50 days overall from the first click, up to 365 days for quote-based orders)**, plus any delay before cash is collected. In the journey simulation, blended CAC measured 30 days after the first click is about €2,790 (payback ratio 0.6) against about €730 after 365 days (2.7).
 - **High-ticket note:** there are no repeat purchases in this model (0%), so payback is purely a first-order question and lifetime value equals first-order value.
 
 ## Supporting metric: Incremental ROAS (iROAS)
