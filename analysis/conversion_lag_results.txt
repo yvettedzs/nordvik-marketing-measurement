@@ -1,0 +1,65 @@
+Conversion-lag cohorts (simulated journeys, fictional brand "Nordvik Outdoor")
+Source: data/simulated_journeys.csv.gz. Complete cohorts only: last cohort day + 365 days inside the data (ends 2026-10-25).
+First-click cohorts: weeks 2024-10-28 to 2025-10-13 (51 weeks, 245,729 people, 29,703 orders).
+Quote cohorts: weeks 2024-10-28 to 2025-10-13 (51 weeks, 24,500 quote requests).
+
+1. Cumulative conversion by first-click week (orders / people), pooled over complete cohorts
+                         7d        30d        90d       180d       365d
+all                   0.06%      3.15%      9.75%     11.65%     12.07%
+self_serve            0.07%      3.81%     10.86%     12.08%     12.08%
+lead                  0.01%      1.12%      6.27%     10.29%     12.03%
+
+   Share of the 365-day orders already visible
+                         7d        30d        90d       180d       365d
+all                    0.5%      26.1%      80.7%      96.5%     100.0%
+self_serve             0.6%      31.5%      89.9%     100.0%     100.0%
+lead                   0.1%       9.3%      52.1%      85.5%     100.0%
+   Across weekly cohorts, the share visible at day 30 ranges from 22.6% to 31.4% (median 26.0%).
+
+2. Cumulative conversion by quote week (orders / quote requests), pooled
+                         7d        30d        90d       180d       365d
+conversion             0.5%       7.0%      18.8%      24.8%      27.8%
+share_of_365d          1.6%      25.3%      67.8%      89.1%     100.0%
+
+3. Share of each channel's 365-day orders visible by day 7 / 30 / 90 / 180 (clock: first click)
+   a) by first-click channel (what an analyst can see)
+                           7d          30d          90d         180d  orders_365d
+Google                   0.4%        27.8%        82.4%        96.6%        9,512
+Meta                     0.5%        26.0%        80.4%        96.5%        5,734
+Affiliates               0.5%        27.9%        80.7%        96.6%        1,694
+TikTok                   0.4%        23.7%        77.6%        96.7%        2,777
+SEO                      0.6%        25.5%        81.0%        96.3%        5,923
+Direct                   0.3%        24.3%        79.2%        96.4%        4,018
+   b) by true causing channel (validation only; baseline = would have bought anyway)
+                           7d          30d          90d         180d  orders_365d
+Google                   0.2%        17.2%        76.7%        96.3%        8,653
+Meta                     0.3%        14.4%        73.7%        96.3%        2,624
+Affiliates               0.1%         8.9%        64.3%        95.9%        2,094
+TikTok                   0.0%        17.5%        79.7%        96.6%          325
+SEO                      0.4%        20.8%        81.1%        96.4%        2,323
+Email                    0.0%         2.4%        59.6%        95.5%        1,454
+baseline                 0.8%        42.1%        90.4%        96.9%       12,185
+
+4. Payback: blended CAC measured 30 / 90 / 365 days after the first click (complete cohorts)
+   Spend on these cohorts' touches: EUR 21,623,229. Payback ratio = contribution margin per order (55%) / CAC.
+                           30d         90d        365d
+orders                   7,752      23,947      29,658
+blended_cac_eur          2,789         903         729
+cm_per_order_eur         1,738       1,847       1,980
+payback_ratio             0.62        2.05        2.72
+
+   Per-channel incremental CAC (channel spend / orders it truly caused by that day; validation only)
+                           30d         90d        365d    30d/365d
+Google                   5,822       1,306       1,002        5.81
+Meta                    17,144       3,349       2,470        6.94
+Affiliates              13,887       1,919       1,234       11.26
+TikTok                  30,355       6,680       5,324        5.70
+SEO                      3,580         917         744        4.81
+Email                   12,305         497         296       41.54
+
+Notes
+- Lags: self-serve orders arrive log-normal from the causing touch (median 31 days, truncated at 91 days); lead-path
+  orders arrive after a quote_request with a tail of up to 365 days. Measured from the FIRST click, the median is
+  longer (43 days self-serve, 50 overall, all orders), because the causing touch is often not the first one.
+- The repo's weekly dataset truncates the lag at 91 days; the 365-day tail applies to the lead path in this extension only.
+- GA4's maximum lookback window is 90 days.

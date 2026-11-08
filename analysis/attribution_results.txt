@@ -1,0 +1,77 @@
+Attribution models vs counterfactual truth (simulated journeys, fictional brand "Nordvik Outdoor")
+Source: data/simulated_journeys.csv.gz, truth from data/journey_truth_by_channel.csv. Orders: 30,214.
+Observed paths = after per-person consent loss (DE/AT 30%, FR/NL 20%, UK 15%, SE 10%).
+Direct_Other = credit to Direct touches + orders with no tracked touch in the window; truth = baseline orders.
+
+1. Credit share of orders by model (observed paths, 90-day lookback) vs true incremental share
+                     last    last_nd      first     linear   decay_7d  decay_30d          U          W       TRUE
+Google              21.7%      30.2%      24.0%      22.6%      21.6%      22.2%      22.8%      23.0%      29.2%
+Meta                 5.2%      12.4%      14.5%      14.2%       9.4%      12.8%      11.2%      11.4%       8.9%
+Affiliates           1.5%       3.7%       4.2%       3.5%       2.6%       3.3%       3.0%       3.1%       7.1%
+TikTok               1.2%       2.9%       6.2%       4.6%       2.4%       3.9%       4.0%       4.1%       1.1%
+SEO                 10.0%      13.2%      14.0%      10.8%       9.7%      10.3%      11.6%      11.7%       7.8%
+Email                7.7%      10.8%       1.3%       5.5%       7.4%       6.3%       4.8%       4.8%       4.9%
+Direct_Other        52.7%      26.9%      35.9%      38.7%      47.0%      41.3%      42.5%      42.0%      41.0%
+
+2. Model sensitivity (observed, 90-day): spread of credit share across the 8 model variants, most sensitive first
+                        true           min           max      range_pp  max_over_min     ratio_min     ratio_max
+Email                  0.049         0.013         0.108          9.55          8.57         0.257          2.21
+TikTok                 0.011         0.012         0.062          4.99          5.15          1.10          5.67
+Affiliates             0.071         0.015         0.042          2.75          2.89         0.207         0.597
+Meta                   0.089         0.052         0.145          9.26          2.77         0.589          1.63
+Direct_Other           0.410         0.269         0.527         25.87          1.96         0.655          1.29
+SEO                    0.078         0.097         0.140          4.29          1.44          1.24          1.79
+Google                 0.292         0.216         0.302          8.59          1.40         0.738          1.03
+   (ratio = credited orders / true incremental orders; 1.00 = the model matches the truth)
+
+3. Model ROAS (credited revenue / spend; observed, 90-day) vs true iROAS
+                      last     last_nd       first      linear    decay_7d   decay_30d           U           W  TRUE_iROAS
+Google                2.65        3.65        2.92        2.74        2.62        2.69        2.78        2.81        3.60
+Meta                  0.83        1.99        2.31        2.27        1.47        2.03        1.79        1.83        1.46
+Affiliates            0.59        1.47        1.70        1.44        1.02        1.34        1.23        1.28        2.92
+TikTok                0.69        1.71        3.62        2.68        1.39        2.23        2.34        2.39        0.70
+SEO                   6.12        8.00        8.41        6.52        5.91        6.21        7.04        7.06        4.86
+Email                18.89       26.65        3.89       13.98       18.18       15.70       12.13       12.08       12.14
+
+4. Last non-direct click by lookback window (observed): credit share
+                       7d        30d        90d       365d       TRUE
+Google              20.1%      27.2%      30.2%      31.0%      29.2%
+Meta                 4.4%      10.3%      12.4%      13.1%       8.9%
+Affiliates           1.1%       2.8%       3.7%       4.0%       7.1%
+TikTok               1.0%       2.5%       2.9%       3.1%       1.1%
+SEO                  9.5%      12.3%      13.2%      13.3%       7.8%
+Email                7.5%       9.7%      10.8%      11.2%       4.9%
+Direct_Other        56.4%      35.2%      26.9%      24.4%      41.0%
+
+5. Consent loss (last non-direct, 90-day): full paths vs observed paths
+                     full   observed       TRUE
+Google              39.9%      30.2%      29.2%
+Meta                16.1%      12.4%       8.9%
+Affiliates           4.8%       3.7%       7.1%
+TikTok               3.8%       2.9%       1.1%
+SEO                 17.4%      13.2%       7.8%
+Email               14.2%      10.8%       4.9%
+Direct_Other         3.8%      26.9%      41.0%
+
+6. Campaign types (observed, 90-day): attribution errs in both directions; channel totals can hide sub-channel bias
+   Credit share of orders (paid navigational brand clicks count as Google brand) vs true share
+                         last    last_nd      first     linear   decay_7d  decay_30d          U          W       TRUE
+Google brand            17.9%      21.3%       1.9%       8.3%      14.2%      10.2%       9.4%       9.2%       6.8%
+Google generic           3.8%       8.8%      22.1%      14.3%       7.4%      11.9%      13.5%      13.8%      22.4%
+Meta prospecting         2.6%       6.2%      13.4%       9.6%       5.2%       8.1%       8.6%       8.7%       6.0%
+Meta retargeting         2.6%       6.1%       1.1%       4.5%       4.2%       4.7%       2.6%       2.7%       2.8%
+   Credited / true
+                         last    last_nd      first     linear   decay_7d  decay_30d          U          W
+Google brand             2.64       3.14       0.28       1.22       2.09       1.51       1.38       1.35
+Google generic           0.17       0.39       0.98       0.64       0.33       0.53       0.60       0.62
+Meta prospecting         0.44       1.03       2.22       1.60       0.86       1.35       1.43       1.45
+Meta retargeting         0.91       2.16       0.38       1.60       1.49       1.65       0.93       0.94
+
+Notes
+- Every model hands out exactly 1.0 credit per order (checked for all 8 variants x 4 windows x 2 views).
+- GA4's maximum lookback window is 90 days; 365 days is shown for comparison only.
+- S-shape is mentioned in practice, but no standard definition was found, so it is not implemented.
+- W-shaped falls back to U-shaped when there is no quote_request touch in the window (all self-serve orders).
+- 70% of orders have a zero-lift navigational session (Direct 45%, Google brand 30%, SEO 15%, Email 10%) just
+  before purchase. This is a design choice of the simulation and it drives the last-click results.
+- Not in this version: a data-driven proxy (Markov removal effect). Next step.
