@@ -50,6 +50,6 @@ Break-even ROAS is **1.8** (55% contribution margin before marketing). Platform 
 - **Diminishing returns are assumed, not measured:** the effect estimates assume the marginal euro earns about 0.5 to 0.8 times the average. If returns do not diminish, the Meta cut can lose money, but only if Meta's true return is at the top of its range.
 - **One noisy test:** the Meta holdout interval is wide, so judge the results of the cut after about 90 days, not after a month, because buying takes 30 to 90 days.
 - **Halo effects:** Meta may feed Google and SEO searches, which the test does not isolate.
-- **Tracking:** consent loss in DE and AT (about 30% of sessions untracked) may understate results there. Tracking quality has not been audited yet.
+- **Tracking:** consent loss in DE and AT (about 30% of sessions untracked) may understate results there. Tracking quality is checked at weekly level (`sql/`); an event-level audit has not been done.
 - **Timing:** it is off-season, so it is a lower-risk moment to cut.
 - **Costs:** all margin figures use the 70% gross margin and 15% variable cost assumption.
