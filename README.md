@@ -28,7 +28,7 @@ A portfolio project on a **fictional premium D2C outdoor-living brand ("Nordvik 
 | `generate_journeys.py` | Creates the simulated user journeys with counterfactual truth (seed 42) |
 | `data/` | `simulated_weekly_data.csv` (week x market x channel), `events_calendar.csv`, `simulated_journeys.csv.gz` (user-level touches, quote requests and purchases) and `journey_truth_by_channel.csv` |
 | `analysis/` | Meta holdout and discount analyses; attribution models vs truth (`03_attribution_models.py`) and conversion-lag cohorts (`04_conversion_lag_cohorts.py`), with charts and result text |
-| `sql/` | Four tracking-quality SQL checks on the weekly dataset (DuckDB), also callable through the MCP server |
+| `sql/` | Four data-quality SQL checks on the weekly dataset (DuckDB), also callable through the MCP server |
 | `mcp_server/` | Read-only MCP server so Claude answers with the agreed metric definitions and data (6 tools, tested in `tests/`) |
 
 ## How to reproduce
