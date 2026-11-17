@@ -31,6 +31,7 @@ A portfolio project on a **fictional premium D2C outdoor-living brand ("Nordvik 
 | `sql/` | Four data-quality SQL checks on the weekly dataset (DuckDB), also callable through the MCP server |
 | `mcp_server/` | Read-only MCP server so Claude answers with the agreed metric definitions and data (6 tools, tested in `tests/`) |
 | `mcp_app/` | Nordvik steering hub: a role-based dashboard that opens inside Claude as an MCP app (5 views, 3 roles, audit log), built on the `mcp_server` tools and tested in `mcp_app/tests` |  
+| `docs/demo/` | Interactive demo of the steering hub for GitHub Pages: the real dashboard answering from recorded API responses (rebuilt with `mcp_app/demo/record_responses.py`) |  
 
 ## How to reproduce
 
