@@ -1,0 +1,30 @@
+{
+  "name": "nordvik-steering-hub",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Nordvik steering hub MCP app (simulated data, fictional brand)",
+  "type": "module",
+  "scripts": {
+    "build": "cross-env INPUT=mcp-app.html vite build",
+    "typecheck": "tsc --noEmit",
+    "start": "tsx server.ts",
+    "serve": "npm run build && tsx server.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "1.7.5",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "cors": "2.8.6",
+    "express": "5.3.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.6",
+    "@types/node": "26.6.6",
+    "cross-env": "10.1.0",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vite": "8.3.8",
+    "vite-plugin-singlefile": "2.3.4"
+  }
+}
