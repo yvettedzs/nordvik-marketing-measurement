@@ -3,7 +3,8 @@
 A role-based marketing dashboard that opens inside Claude as an MCP app. It helps answer one question, "where
 should the next euro go?", on simulated data for a fictional outdoor-furniture brand, Nordvik Outdoor.
 
-<!-- DEMO LINK: added later -->
+**[Open the interactive demo](https://yvettedzs.github.io/nordvik-marketing-measurement/demo/)**: the same
+dashboard in your browser, answering from recorded responses. No install needed.
 
 ![ROAS lenses view opened in Claude: platform, last non-direct and tested ROAS per channel against the break-even line](screenshots/01_roas_lenses_in_claude.png)
 
@@ -258,13 +259,43 @@ gives a new address), and remove and re-add the connector with the new address.
 A quick tunnel's address changes every time it starts, and anyone with the address can reach the app while the
 tunnel runs. Stop it when you are done.
 
+## Demo page
+
+The [interactive demo](https://yvettedzs.github.io/nordvik-marketing-measurement/demo/) is a static copy of the
+dashboard on GitHub Pages. It needs no Python, no MCP server and no Claude.
+
+- **Same dashboard code.** It is built from the same `mcp-app.html` and `src/mcp-app.js`. Only the connection to
+  the host is swapped: `demo/shim.js` answers the four tool calls from `docs/demo/recordings.json`.
+- **Recorded, not computed.** The recordings come from the real API. They cover every role, view, option value
+  and drilldown the dashboard can request, plus 12 refusals: 2,784 calls in all. A call that was not recorded gets
+  an error saying so.
+- **Access rules and the audit log run in the browser.** The page checks roles against the recorded roles table
+  and shows the API's own refusal messages. The audit log lives in the browser tab and clears on reload. A banner
+  on the page says this is not access control.
+- **Opening call.** The page opens like a Claude call: by default `performance_marketing` and `roas_lenses`. Add
+  `?role=…&view=…` to open another one, for example
+  [`?role=country_manager_de&view=data_quality`](https://yvettedzs.github.io/nordvik-marketing-measurement/demo/?role=country_manager_de&view=data_quality)
+  to see a refusal.
+
+To rebuild it after a change to the data, the metric code or the dashboard (from the repository root, about 7
+minutes for the recordings):
+
+```bash
+.venv/bin/python mcp_app/demo/record_responses.py     # writes docs/demo/recordings.json
+cd mcp_app/mcp-server
+npm run build:demo                                     # writes docs/demo/index.html
+```
+
+To try it locally, serve the folder (the page loads `recordings.json`, so opening the file directly does not work):
+`python -m http.server 8000 --directory docs/demo`, then open `http://localhost:8000`.
+
 ## Tests
 
 Run from the repository root (use the Python path for your shell, as in "How to run it"):
 
 ```bash
 .venv/bin/python -m pytest tests            # the mcp_server tools
-.venv/bin/python -m pytest mcp_app/tests    # the steering hub API, about 2 minutes
+.venv/bin/python -m pytest mcp_app/tests    # the steering hub API and the demo recordings, under 4 minutes
 ```
 
 **`tests/`** checks the existing `mcp_server` tools that this app builds on. Tool results match independent pandas
@@ -281,6 +312,10 @@ that the MCP protocol works. Add `-m "not slow"` to skip the slow tests.
 | `test_audit.py` | Every run, drilldown and refusal adds exactly one audit line with the six keys; reads add none |
 | `test_read_only.py` | A before-and-after file hash shows nothing in the repository changes; `views.py` holds no formula constants |
 | `test_warm_up.py` | The warm-up covers every market, never starts in the tests, and the API answers while it runs |
+| `test_demo_recordings.py` | The demo recordings are complete and hold no local paths; the slow test re-records every call and checks it equals the current API output |
+
+The demo check re-records every call, so it is slow: the whole `mcp_app/tests` suite took under 4 minutes on the
+development laptop. Add `-m "not slow"` to skip it.
 
 **TypeScript type check** for the MCP server and dashboard:
 

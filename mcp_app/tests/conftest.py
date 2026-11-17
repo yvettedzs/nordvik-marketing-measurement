@@ -14,6 +14,10 @@ import api  # noqa: E402
 
 LEAD, PM, CM = "leadership", "performance_marketing", "country_manager_de"
 
+
+def pytest_configure(config):
+    config.addinivalue_line("markers", "slow: re-records the demo responses (deselect with -m 'not slow')")
+
 # one default drilldown segment per view (plus options the segment needs)
 DRILLS = {
     "roas_lenses": [({"channel": "Meta"}, {}), ({"channel": "SEO"}, {})],

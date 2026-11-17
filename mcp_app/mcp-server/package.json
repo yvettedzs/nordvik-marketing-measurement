@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "cross-env INPUT=mcp-app.html vite build",
+    "build:demo": "vite build --config vite.demo.config.ts",
     "typecheck": "tsc --noEmit",
     "start": "tsx server.ts",
     "serve": "npm run build && tsx server.ts"
