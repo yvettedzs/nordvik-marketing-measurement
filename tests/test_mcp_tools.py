@@ -356,7 +356,7 @@ def test_server_does_not_read_answer_key():
 def _snapshot(root):
     out = {}
     for p in sorted(root.rglob("*")):
-        if p.is_file() and not {"__pycache__", ".pytest_cache", ".venv", "venv", ".git"} & set(p.relative_to(root).parts):
+        if p.is_file() and not {"__pycache__", ".pytest_cache", ".venv", "venv", ".git", "node_modules"} & set(p.relative_to(root).parts):
             out[p.relative_to(root).as_posix()] = hashlib.sha256(p.read_bytes()).hexdigest()
     return out
 
