@@ -30,6 +30,7 @@ A portfolio project on a **fictional premium D2C outdoor-living brand ("Nordvik 
 | `analysis/` | Meta holdout and discount analyses; attribution models vs truth (`03_attribution_models.py`) and conversion-lag cohorts (`04_conversion_lag_cohorts.py`), with charts and result text |
 | `sql/` | Four data-quality SQL checks on the weekly dataset (DuckDB), also callable through the MCP server |
 | `mcp_server/` | Read-only MCP server so Claude answers with the agreed metric definitions and data (6 tools, tested in `tests/`) |
+| `mcp_app/` | Nordvik steering hub: a role-based dashboard that opens inside Claude as an MCP app (5 views, 3 roles, audit log), built on the `mcp_server` tools and tested in `mcp_app/tests` |  
 
 ## How to reproduce
 
