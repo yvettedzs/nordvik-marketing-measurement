@@ -12,6 +12,10 @@ A portfolio project on a **fictional premium D2C outdoor-living brand ("Nordvik 
 | Did the spring discount pay off? | Promo vs no-promo markets, outcome = orders, then contribution margin | Real lift about +24% (naive pre/post showed +49%), then a -10% pull-forward dip. It needed about +77% to break even, and cost roughly **EUR 1.2M of margin** over 8 weeks |
 | Do attribution models agree with incrementality? | User-journey simulation with counterfactual truth (250,000 people, one-year cohort); 8 attribution model variants x lookback windows of 7 to 365 days | No. They disagree with each other and with the truth **in both directions**: TikTok and SEO are over-credited by every model, Affiliates under-credited by every model, and channel totals hide sub-channel bias (Google brand 2.6x its true share under last click, Google generic 0.17x). Email, TikTok, Affiliates and Meta are the most model-sensitive, so they are the ones to test. A 30-day window sees only 26% of a cohort's orders. See `docs/attribution_findings.md` |
 | Where should the next euro go? | Budget memo | Trim Meta and TikTok, reinvest part in Google non-brand and Affiliates in small steps, stop broad discounting, and run follow-up tests |
+ 
+![Germany weekly orders vs a synthetic control, with the Meta pause shaded: pausing Meta cut German orders by about 7%, incremental ROAS 2.45 (95% range 1.0 to 3.9) against break-even 1.8](analysis/meta_holdout_headline.png)
+
+*Meta geo holdout: German orders ran below the synthetic control during the 12-week pause and the 12 weeks after, 497 fewer orders in all.*
 
 ## Repository contents
 
